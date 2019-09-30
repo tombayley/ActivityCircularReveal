@@ -29,6 +29,9 @@ class CircularReveal constructor(var rootLayout: View) {
     protected var duration: Long = 0
     protected var color: Int = Color.TRANSPARENT
 
+    // duration is this many times larger when revealing to make the animation feel more consistent between revealing and un-revealing
+    protected var revealDurationMult = 1.8
+
     init {
         val background = rootLayout.background
         if (background is ColorDrawable) originalColor = background.color
@@ -115,8 +118,7 @@ class CircularReveal constructor(var rootLayout: View) {
         // make the view visible and start the animation
         rootLayout.visibility = View.VISIBLE
 
-        // duration * 1.2 here to make the animation feel more consistent between revealing and un-revealing
-        val circularReveal = getAnimator(0f, maxRadius, (duration * 1.2).toLong())
+        val circularReveal = getAnimator(0f, maxRadius, (duration * revealDurationMult).toLong())
 
         circularReveal.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
@@ -163,7 +165,7 @@ class CircularReveal constructor(var rootLayout: View) {
         cancelTimer()
 
         val alphaFadeLengthPct = 0.4f
-        val waitTime: Long = if (reveal) 0 else (alphaFadeLengthPct * duration / 2).toLong()
+        val waitTime: Long = if (reveal) 0 else (alphaFadeLengthPct * duration * 1/revealDurationMult).toLong()
 
         Handler().postDelayed({
             val alphaDuration = duration * alphaFadeLengthPct
@@ -186,6 +188,5 @@ class CircularReveal constructor(var rootLayout: View) {
     protected fun cancelTimer() {
         countDownTimer?.cancel()
     }
-
 
 }
