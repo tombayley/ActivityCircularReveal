@@ -1,5 +1,7 @@
 # ActivityCircularReveal
 
+[![](https://jitpack.io/v/tombayley/ActivityCircularReveal.svg)](https://jitpack.io/#tombayley/ActivityCircularReveal)
+
 A library for starting & finishing Android activities with a circular animation.
 
 Code based on & modified from this article:
