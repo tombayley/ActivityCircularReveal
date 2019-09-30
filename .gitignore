@@ -36,3 +36,5 @@ proguard/
 
 # Misc
 signing.properties
+
+!example.apk
