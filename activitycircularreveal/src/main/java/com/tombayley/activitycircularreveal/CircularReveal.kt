@@ -22,11 +22,17 @@ import kotlin.math.max
 
 class CircularReveal constructor(var rootLayout: View) {
 
+    // Background color of new activity
     protected var originalColor: Int? = null
 
+    // X and Y positions relative to activity of the view clicked
     protected var revealX: Int = 0
     protected var revealY: Int = 0
+
+    // Length of animation
     protected var duration: Long = 0
+
+    // Color used in the reveal animation
     protected var color: Int = Color.TRANSPARENT
 
     // duration is this many times larger when revealing to make the animation feel more consistent between revealing and un-revealing
@@ -43,6 +49,11 @@ class CircularReveal constructor(var rootLayout: View) {
         const val EXTRA_COLOR           = BuildConfig.LIBRARY_PACKAGE_NAME + ".EXTRA_COLOR"
         const val EXTRA_DURATION        = BuildConfig.LIBRARY_PACKAGE_NAME + ".EXTRA_DURATION"
 
+        /**
+         * Starts a new activity using the options defined in the builder
+         *
+         * @param builder Builder
+         */
         @JvmStatic
         fun presentActivity(builder: Builder) {
             val options: Bundle? = setup(builder.activity, builder.viewClicked, builder.intent, builder.duration, builder.revealColor)
@@ -54,6 +65,16 @@ class CircularReveal constructor(var rootLayout: View) {
             }
         }
 
+        /**
+         * Creates activity options and sets up the animation options
+         *
+         * @param activity Activity
+         * @param viewClicked View
+         * @param intent Intent
+         * @param duration Long
+         * @param color Int
+         * @return Bundle?
+         */
         private fun setup(activity: Activity, viewClicked: View, intent: Intent, duration: Long, color: Int): Bundle? {
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
                 activity.startActivity(intent)
@@ -76,6 +97,17 @@ class CircularReveal constructor(var rootLayout: View) {
         }
     }
 
+    /**
+     * Used to confirgure the animation
+     *
+     * @property activity Activity
+     * @property viewClicked View
+     * @property intent Intent
+     * @property duration Long
+     * @property requestCode Int?
+     * @property revealColor Int
+     * @constructor
+     */
     class Builder(
         val activity: Activity,
         val viewClicked: View,
@@ -89,6 +121,11 @@ class CircularReveal constructor(var rootLayout: View) {
         var revealColor: Int = Color.TRANSPARENT
     }
 
+    /**
+     * Must be called in onCreate() of the activity being revealed
+     *
+     * @param intent Intent
+     */
     fun onActivityCreate(intent: Intent) {
         if (!intent.hasExtra(EXTRA_REVEAL_X_POS) || !intent.hasExtra(EXTRA_REVEAL_Y_POS) || !intent.hasExtra(EXTRA_DURATION)) {
             rootLayout.visibility = View.VISIBLE
@@ -112,6 +149,11 @@ class CircularReveal constructor(var rootLayout: View) {
         })
     }
 
+    /**
+     * Begins the animation for revealing the activity
+     *
+     * @param duration Long
+     */
     protected fun revealActivity(duration: Long) {
         val maxRadius = max(rootLayout.width, rootLayout.height) * 1.1f
 
@@ -130,6 +172,11 @@ class CircularReveal constructor(var rootLayout: View) {
         startTimer(true)
     }
 
+    /**
+     * Begins the animation for un-revealing the activity
+     *
+     * @param activity Activity
+     */
     fun unRevealActivity(activity: Activity) {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
             activity.finish()
@@ -152,6 +199,14 @@ class CircularReveal constructor(var rootLayout: View) {
         startTimer(false)
     }
 
+    /**
+     * Creates the reveal animation
+     *
+     * @param startRadius Float
+     * @param endRadius Float
+     * @param duration Long
+     * @return Animator
+     */
     protected fun getAnimator(startRadius: Float, endRadius: Float, duration: Long): Animator {
         val circularReveal = ViewAnimationUtils.createCircularReveal(rootLayout, revealX, revealY, startRadius, endRadius)
             .setDuration(duration)
@@ -161,6 +216,11 @@ class CircularReveal constructor(var rootLayout: View) {
 
     protected var countDownTimer: CountDownTimer? = null
 
+    /**
+     * Used to animate the reveal/un-reveal with color
+     *
+     * @param reveal Boolean
+     */
     protected fun startTimer(reveal: Boolean) {
         cancelTimer()
 
@@ -185,6 +245,9 @@ class CircularReveal constructor(var rootLayout: View) {
         }, waitTime)
     }
 
+    /**
+     * Cancels the timer used for coloring the animation
+     */
     protected fun cancelTimer() {
         countDownTimer?.cancel()
     }
