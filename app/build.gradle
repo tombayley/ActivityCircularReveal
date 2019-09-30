@@ -24,7 +24,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.github.tombayley:ActivityCircularReveal:1.0.0'
+    implementation 'com.github.tombayley:ActivityCircularReveal:1.0.1'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
