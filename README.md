@@ -60,7 +60,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_other)
 
-    val rootView: View = findViewById(R.id.root_coord)
+    val rootView: View = // ...
     mActivityCircularReveal = CircularReveal(rootView)
     mActivityCircularReveal.onActivityCreate(intent)
 }
