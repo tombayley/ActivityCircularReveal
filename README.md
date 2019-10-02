@@ -51,6 +51,18 @@ CircularReveal.presentActivity(CircularReveal.Builder(
     1000
 ))
 ```
+<details><summary>Java</summary>
+<p>
+```java
+CircularReveal.presentActivity(new CircularReveal.Builder(
+    this,
+    viewClicked,
+    new Intent(this, OtherActivity.class),
+    1000
+));
+```
+</p>
+</details>
 
 In the activity that you want to start:
 ```kotlin
@@ -69,14 +81,37 @@ override fun onBackPressed() {
     mActivityCircularReveal.unRevealActivity(this)
 }
 ```
-`mActivityCircularReveal.unRevealActivity(this)` must be called when you want to finish the activity.
+<details><summary>Java</summary>
+<p>
+```java
+private CircularReveal mActivityCircularReveal;
 
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_other)
+
+    View rootView = // ...
+    mActivityCircularReveal = new CircularReveal(rootView);
+    mActivityCircularReveal.onActivityCreate(getIntent());
+}
+
+override fun onBackPressed() {
+    mActivityCircularReveal.unRevealActivity(this)
+}
+```
+</p>
+</details>
+
+
+The following must be called when you want to finish the activity.
+```
+mActivityCircularReveal.unRevealActivity(this)
+```
 
 Add this to the activity you want to circular reveal in the manifest:
 ```
 android:theme="@style/CircularReveal"
 ```
-
 
 And then add the style to your styles.xml:
 ```
