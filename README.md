@@ -43,6 +43,8 @@ dependencies {
 
 ## Usage
 In the activity you are starting another one from:
+
+##### Kotlin
 ```kotlin
 CircularReveal.presentActivity(CircularReveal.Builder(
     this,
@@ -64,7 +66,12 @@ CircularReveal.presentActivity(new CircularReveal.Builder(
 ```
 </details>
 
+
+
+
 In the activity that you want to start:
+
+##### Kotlin
 ```kotlin
 private lateinit var mActivityCircularReveal: CircularReveal
 
@@ -104,15 +111,21 @@ override fun onBackPressed() {
 </details>
 
 
+
+
+
 The following must be called when you want to finish the activity.
 ```
 mActivityCircularReveal.unRevealActivity(this)
 ```
 
+
+
 Add this to the activity you want to circular reveal in the manifest:
 ```
 android:theme="@style/CircularReveal"
 ```
+
 
 And then add the style to your styles.xml:
 ```
