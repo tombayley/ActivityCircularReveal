@@ -51,8 +51,9 @@ CircularReveal.presentActivity(CircularReveal.Builder(
     1000
 ))
 ```
-<details><summary>Java</summary>
-<p>
+<details>
+<summary>Java</summary>
+
 ```java
 CircularReveal.presentActivity(new CircularReveal.Builder(
     this,
@@ -61,7 +62,6 @@ CircularReveal.presentActivity(new CircularReveal.Builder(
     1000
 ));
 ```
-</p>
 </details>
 
 In the activity that you want to start:
@@ -81,8 +81,10 @@ override fun onBackPressed() {
     mActivityCircularReveal.unRevealActivity(this)
 }
 ```
-<details><summary>Java</summary>
-<p>
+
+<details>
+<summary>Java</summary>
+
 ```java
 private CircularReveal mActivityCircularReveal;
 
@@ -99,7 +101,6 @@ override fun onBackPressed() {
     mActivityCircularReveal.unRevealActivity(this)
 }
 ```
-</p>
 </details>
 
 
