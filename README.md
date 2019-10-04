@@ -1,11 +1,15 @@
 # ActivityCircularReveal
 
 [![](https://jitpack.io/v/tombayley/ActivityCircularReveal.svg)](https://jitpack.io/#tombayley/ActivityCircularReveal)
+[![API](https://img.shields.io/badge/API-22%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=22)
+
 
 A library for starting & finishing Android activities with a circular animation.
 
 Code based on & modified from this article:
 https://android.jlelse.eu/a-little-thing-that-matter-how-to-reveal-an-activity-with-circular-revelation-d94f9bfcae28
+
+Usable in Lollipop 5.0+ projects. Circular reveal only working in Lollipop 5.1+.
 
 ## Demo
 
@@ -165,3 +169,7 @@ You can then use `onActivityResult()` as normal
 ```kotlin
 builder.requestCode = MY_REQUEST_CODE
 ```
+
+
+## TODO
+- Work with Lollipop 5.0
