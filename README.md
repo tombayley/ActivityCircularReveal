@@ -2,7 +2,7 @@
 
 [![](https://jitpack.io/v/tombayley/ActivityCircularReveal.svg)](https://jitpack.io/#tombayley/ActivityCircularReveal)
 [![API](https://img.shields.io/badge/API-22%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=22)
-
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-ActivityCircularReveal-green.svg?style=flat)](https://android-arsenal.com/details/1/7923)
 
 A library for starting & finishing Android activities with a circular animation.
 
@@ -36,7 +36,7 @@ allprojects {
 And add the library to your module build.gradle:
 ```
 dependencies {
-    implementation 'com.github.tombayley:ActivityCircularReveal:1.0.1'
+    implementation 'com.github.tombayley:ActivityCircularReveal:1.0.2'
 }
 ```
 
