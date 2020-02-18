@@ -33,6 +33,7 @@ proguard/
 /.idea/
 /.settings/
 *.DS_Store
+/.project
 
 # Misc
 signing.properties
