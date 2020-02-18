@@ -12,21 +12,20 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class OtherActivity : AppCompatActivity() {
 
-    protected lateinit var mActivityCircularReveal: CircularReveal
+    protected lateinit var activityCircularReveal: CircularReveal
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other)
-//        setSupportActionBar(toolbar)
 
         val rootView: View = findViewById(R.id.root_coord)
 
-        mActivityCircularReveal = CircularReveal(rootView)
-        mActivityCircularReveal.onActivityCreate(intent)
+        activityCircularReveal = CircularReveal(rootView)
+        activityCircularReveal.onActivityCreate(intent)
     }
 
     override fun onBackPressed() {
-        mActivityCircularReveal.unRevealActivity(this)
+        activityCircularReveal.unRevealActivity(this)
     }
 
 }
