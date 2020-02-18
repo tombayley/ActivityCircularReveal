@@ -36,7 +36,7 @@ allprojects {
 And add the library to your module build.gradle:
 ```
 dependencies {
-    implementation 'com.github.tombayley:ActivityCircularReveal:1.0.1'
+    implementation 'com.github.tombayley:ActivityCircularReveal:1.0.2'
 }
 ```
 
