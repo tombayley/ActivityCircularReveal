@@ -20,7 +20,9 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import kotlin.math.abs
 import kotlin.math.max
 
-class CircularReveal constructor(var rootLayout: View) {
+class CircularReveal(
+    val rootLayout: View
+) {
 
     // Background color of new activity
     protected var originalColor: Int? = null
@@ -35,8 +37,11 @@ class CircularReveal constructor(var rootLayout: View) {
     // Color used in the reveal animation
     protected var color: Int = Color.TRANSPARENT
 
-    // duration is this many times larger when revealing to make the animation feel more consistent between revealing and un-revealing
+    // Duration is this many times larger when revealing to make
+    // the animation feel more consistent between revealing and un-revealing
     protected var revealDurationMult = 1.8
+
+    protected var countDownTimer: CountDownTimer? = null
 
     init {
         val background = rootLayout.background
@@ -56,49 +61,47 @@ class CircularReveal constructor(var rootLayout: View) {
          */
         @JvmStatic
         fun presentActivity(builder: Builder) {
-            val options: Bundle? = setup(builder.activity, builder.viewClicked, builder.intent, builder.duration, builder.revealColor)
+            val options: Bundle? = setup(builder)
 
             if (builder.requestCode == null) {
                 ActivityCompat.startActivity(builder.activity, builder.intent, options)
             } else {
-                ActivityCompat.startActivityForResult(builder.activity, builder.intent, builder.requestCode!!, options)
+                ActivityCompat.startActivityForResult(
+                    builder.activity, builder.intent, builder.requestCode!!, options
+                )
             }
         }
 
         /**
          * Creates activity options and sets up the animation options
          *
-         * @param activity Activity
-         * @param viewClicked View
-         * @param intent Intent
-         * @param duration Long
-         * @param color Int
+         * @param builder Builder
          * @return Bundle?
          */
-        private fun setup(activity: Activity, viewClicked: View, intent: Intent, duration: Long, color: Int): Bundle? {
+        private fun setup(builder: Builder): Bundle? {
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
-                activity.startActivity(intent)
+                builder.activity.startActivity(builder.intent)
                 return null
             }
 
             val location = IntArray(2)
-            viewClicked.getLocationInWindow(location)
+            builder.viewClicked.getLocationInWindow(location)
 
-            intent.putExtra(EXTRA_COLOR, color)
-                .putExtra(EXTRA_DURATION, duration)
-                .putExtra(EXTRA_REVEAL_X_POS, location[0] + viewClicked.width / 2)
-                .putExtra(EXTRA_REVEAL_Y_POS, location[1] + viewClicked.height / 2)
+            builder.intent.putExtra(EXTRA_COLOR, builder.revealColor)
+                .putExtra(EXTRA_DURATION, builder.duration)
+                .putExtra(EXTRA_REVEAL_X_POS, location[0] + builder.viewClicked.width / 2)
+                .putExtra(EXTRA_REVEAL_Y_POS, location[1] + builder.viewClicked.height / 2)
 
             return ActivityOptionsCompat.makeSceneTransitionAnimation(
-                activity,
-                View(activity),
+                builder.activity,
+                View(builder.activity),
                 "transition"
             ).toBundle()
         }
     }
 
     /**
-     * Used to confirgure the animation
+     * Used to configure the animation
      *
      * @property activity Activity
      * @property viewClicked View
@@ -127,7 +130,10 @@ class CircularReveal constructor(var rootLayout: View) {
      * @param intent Intent
      */
     fun onActivityCreate(intent: Intent) {
-        if (!intent.hasExtra(EXTRA_REVEAL_X_POS) || !intent.hasExtra(EXTRA_REVEAL_Y_POS) || !intent.hasExtra(EXTRA_DURATION)) {
+        if (!intent.hasExtra(EXTRA_REVEAL_X_POS) ||
+            !intent.hasExtra(EXTRA_REVEAL_Y_POS) ||
+            !intent.hasExtra(EXTRA_DURATION)
+        ) {
             rootLayout.visibility = View.VISIBLE
             return
         }
@@ -160,7 +166,11 @@ class CircularReveal constructor(var rootLayout: View) {
         // make the view visible and start the animation
         rootLayout.visibility = View.VISIBLE
 
-        val circularReveal = getAnimator(0f, maxRadius, (duration * revealDurationMult).toLong())
+        val circularReveal = getAnimator(
+            0f,
+            maxRadius,
+            (duration * revealDurationMult).toLong()
+        )
 
         circularReveal.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
@@ -184,7 +194,6 @@ class CircularReveal constructor(var rootLayout: View) {
         }
 
         val maxRadius = max(rootLayout.width, rootLayout.height) * 1.1f
-
         val circularReveal = getAnimator(maxRadius, 0f, duration)
 
         circularReveal.addListener(object : AnimatorListenerAdapter() {
@@ -208,13 +217,13 @@ class CircularReveal constructor(var rootLayout: View) {
      * @return Animator
      */
     protected fun getAnimator(startRadius: Float, endRadius: Float, duration: Long): Animator {
-        val circularReveal = ViewAnimationUtils.createCircularReveal(rootLayout, revealX, revealY, startRadius, endRadius)
-            .setDuration(duration)
-        circularReveal.interpolator = FastOutSlowInInterpolator()
-        return circularReveal
+        return ViewAnimationUtils.createCircularReveal(
+            rootLayout, revealX, revealY, startRadius, endRadius
+        ).apply {
+            setDuration(duration)
+            interpolator = FastOutSlowInInterpolator()
+        }
     }
-
-    protected var countDownTimer: CountDownTimer? = null
 
     /**
      * Used to animate the reveal/un-reveal with color
@@ -225,7 +234,8 @@ class CircularReveal constructor(var rootLayout: View) {
         cancelTimer()
 
         val alphaFadeLengthPct = 0.4f
-        val waitTime: Long = if (reveal) 0 else (alphaFadeLengthPct * duration * 1/revealDurationMult).toLong()
+        val waitTime =
+            if (reveal) 0 else (alphaFadeLengthPct * duration * 1/revealDurationMult).toLong()
 
         Handler().postDelayed({
             val alphaDuration = duration * alphaFadeLengthPct
@@ -234,7 +244,10 @@ class CircularReveal constructor(var rootLayout: View) {
                 override fun onTick(millisUntilFinished: Long) {
                     val completePct = abs(alphaDuration - millisUntilFinished) / alphaDuration
                     val pct = 1f - if (reveal) completePct else 1 - completePct
-                    if (originalColor != null) rootLayout.setBackgroundColor(blendARGB(originalColor!!, color, pct))
+
+                    if (originalColor != null) {
+                        rootLayout.setBackgroundColor(blendARGB(originalColor!!, color, pct))
+                    }
                 }
 
                 override fun onFinish() {
