@@ -79,10 +79,7 @@ class CircularReveal(
          * @return Bundle?
          */
         private fun setup(builder: Builder): Bundle? {
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
-                builder.activity.startActivity(builder.intent)
-                return null
-            }
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) return null
 
             val location = IntArray(2)
             builder.viewClicked.getLocationInWindow(location)
